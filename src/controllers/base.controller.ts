@@ -12,8 +12,9 @@ export abstract class BaseController<IAPIModel, IModel> {
   }
 
   @Get(":id")
-  async get(@Param('id') id: number): Promise<IAPIModel> {
-    return this.mapper.ToApiModel(await this.service.get(id));
+  async get(@Param('id') id: number): Promise<IModel> {
+    // return this.mapper.ToApiModel(await this.service.get(id));
+    return this.service.get(id);
   }
 
   @Post()
