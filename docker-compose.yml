@@ -1,0 +1,20 @@
+# Starts a dev database to use for testing as well as an adminer web based UI
+
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: NestStarter
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

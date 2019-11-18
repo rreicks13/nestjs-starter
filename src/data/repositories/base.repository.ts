@@ -12,11 +12,9 @@ export interface IRepository<IModel extends IDbModel> {
 
 @Injectable()
 export class BaseRepository<IModel extends IDbModel> implements IRepository<IModel> {
-    private tableName: string;
+    protected tableName: string;
 
     constructor(args: new () => IModel) {
-        console.log(new args().toString());
-        console.log(Reflect.getMetadata(tableNameMetadataKey, args));
         if (!Reflect.hasMetadata(tableNameMetadataKey, args))
         {
             throw "Invalid setup: Cannot create a repository for a model that does not have a table name attribute";

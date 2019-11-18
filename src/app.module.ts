@@ -8,20 +8,29 @@ import { ThingMapper } from './mappers/Thing.mapper';
 import { BaseMapper } from './mappers/base.mapper';
 import { ApiThing } from './models/api-thing.model';
 import "automapper-ts/dist/automapper";
+import { ConfigService } from './config/config.service';
 
 
 const Repositories: Provider<any>[] = [
-  {provide: ThingRepository, useFactory: () => (new BaseRepository<Thing>(Thing))}
+  {provide: ThingRepository, useFactory: () => (new ThingRepository())}
 ]
 
 const Mappers: Provider<any>[] = [
   {provide: ThingMapper, useFactory: () => (new BaseMapper<ApiThing, Thing>())}
 ]
 
+const Services: Provider<any>[] = [
+  ThingService,
+  {
+    provide: ConfigService,
+    useValue: new ConfigService(`${process.env.NODE_ENV || 'development'}.env`),
+  }
+]
+
 @Module({
   imports: [],
   controllers: [ThingController],
-  providers: ([ThingService] as Provider<any>[]).concat(Repositories).concat(Mappers),
+  providers: Services.concat(Repositories).concat(Mappers),
 })
 export class AppModule {}
 
