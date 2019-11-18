@@ -11,7 +11,9 @@ export class ThingRepository extends BaseRepository<Thing> {
                 dbcontext.schema.createTable(this.tableName, (table) => {
                     table.increments('id').primary();
                     table.string('name', 100);
-                });
+                }).then(() => {
+
+                })
             }
         })
     }

@@ -32,7 +32,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-Open a browser to localhost:5005/api/things to get a list of all the current "things"
+Open a browser to localhost:5005 to get a list of all the available endpoints
 
 ## Test
 
