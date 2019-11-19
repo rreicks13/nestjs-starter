@@ -3,7 +3,7 @@ import { ThingService } from '../services/thing.service';
 import { BaseController } from './base.controller';
 import { ApiThing } from 'src/models/api-thing.model';
 import { Thing } from 'src/data/models/thing.model';
-import { ThingMapper } from 'src/mappers/Thing.mapper';
+import { ThingMapper } from 'src/mappers/thing.mapper';
 
 @Controller("api/things")
 export class ThingController extends BaseController<ApiThing, Thing> {

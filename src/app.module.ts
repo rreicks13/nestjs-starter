@@ -4,15 +4,16 @@ import { ThingService } from './services/thing.service';
 import { ThingRepository } from './data/repositories/thing.repository';
 import { BaseRepository } from './data/repositories/base.repository';
 import { Thing } from './data/models/thing.model';
-import { ThingMapper } from './mappers/Thing.mapper';
+import { ThingMapper } from './mappers/thing.mapper';
 import { BaseMapper } from './mappers/base.mapper';
 import { ApiThing } from './models/api-thing.model';
 import "automapper-ts/dist/automapper";
 import { ConfigService } from './config/config.service';
+import { DbContext } from './data/dbcontext';
 
 
 const Repositories: Provider<any>[] = [
-  {provide: ThingRepository, useFactory: () => (new ThingRepository())}
+  {provide: ThingRepository, useFactory: (dbContext: DbContext) => (new ThingRepository(dbContext)), inject: [DbContext] }
 ]
 
 const Mappers: Provider<any>[] = [
@@ -21,9 +22,10 @@ const Mappers: Provider<any>[] = [
 
 const Services: Provider<any>[] = [
   ThingService,
+  DbContext,
   {
     provide: ConfigService,
-    useValue: new ConfigService(`${process.env.NODE_ENV || 'development'}.env`),
+    useValue: new ConfigService(`.env`),
   }
 ]
 

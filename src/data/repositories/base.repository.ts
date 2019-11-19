@@ -1,6 +1,6 @@
-import { dbcontext } from "../dbcontext";
 import { Injectable, BadGatewayException } from '@nestjs/common';
 import { IDbModel, tableNameMetadataKey } from "../models/db.model";
+import { DbContext } from '../dbcontext';
 
 export interface IRepository<IModel extends IDbModel> {
     getAll(): Promise<IModel[]>;
@@ -14,7 +14,7 @@ export interface IRepository<IModel extends IDbModel> {
 export class BaseRepository<IModel extends IDbModel> implements IRepository<IModel> {
     protected tableName: string;
 
-    constructor(args: new () => IModel) {
+    constructor(protected dbcontext: DbContext, args: new () => IModel) {
         if (!Reflect.hasMetadata(tableNameMetadataKey, args))
         {
             throw "Invalid setup: Cannot create a repository for a model that does not have a table name attribute";
@@ -23,22 +23,22 @@ export class BaseRepository<IModel extends IDbModel> implements IRepository<IMod
     }
 
     async getAll(): Promise<IModel[]> {
-        return await dbcontext<IModel>(this.tableName) as IModel[];
+        return await this.dbcontext.knex<IModel>(this.tableName) as IModel[];
     }
 
     async get(id: number): Promise<IModel> {
-        return await dbcontext<IModel>(this.tableName).where("id", id).first() as IModel;
+        return await this.dbcontext.knex<IModel>(this.tableName).where("id", id).first() as IModel;
     }
 
     async add(model: IModel): Promise<void> {
-        await dbcontext.insert(model).into(this.tableName);
+        await this.dbcontext.knex.insert(model).into(this.tableName);
     }
 
     async delete(id: number): Promise<void> {
-        await dbcontext(this.tableName).where("id", id).del();
+        await this.dbcontext.knex(this.tableName).where("id", id).del();
     }
 
     async update(id: number, updatedModel: IModel): Promise<void> {
-        await dbcontext(this.tableName).where("id", id).update(updatedModel);
+        await this.dbcontext.knex(this.tableName).where("id", id).update(updatedModel);
     }
 }

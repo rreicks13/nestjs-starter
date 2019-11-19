@@ -1,0 +1,19 @@
+# Starts a dev database to use for testing as well as an adminer web based UI
+
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+  api:
+    build: .
+    ports:
+    - "5005:5005"
+    depends_on:
+      - db
